@@ -10,14 +10,24 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 
 def generate_launch_description():
     car_description_dir = get_package_share_directory("car_description")
-    
+
     model_arg = DeclareLaunchArgument(name="model", default_value=os.path.join(
                                         car_description_dir, "urdf", "robot.urdf.xacro"
                                         ),
                                       description="Absolute path to robot urdf file"
     )
 
-    robot_description = ParameterValue(Command(["xacro ", LaunchConfiguration("model")]), value_type=str) # read model argument, if none fallback goes to model_arg
+    ros_distro = os.environ["ROS_DISTRO"]
+    is_ignition = "True" if ros_distro == "humble" else "False"
+    
+    robot_description = ParameterValue(Command([
+            "xacro ",
+            LaunchConfiguration("model"),
+            " is_ignition:=",
+            is_ignition
+        ]),
+        value_type=str
+    )
 
     # clarissa@clar-ubuntu:~/Documents/pers-robotics/car-sim-fusion$ ros2 run robot_state_publisher robot_state_publisher --ros-args -p robot_description:="$( xacro //home/clarissa/Documents/pers-robotics/car-sim-fusion/src/car_description/urdf/robot.urdf.xacro)"
     gazebo_resource_path = SetEnvironmentVariable(

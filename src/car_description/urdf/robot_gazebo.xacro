@@ -37,5 +37,11 @@
         <minDepth>0.001</minDepth>
         <maxVel>1.0</maxVel>
     </gazebo>
+
+    <gazebo>
+        <plugin filename="gz_ros2_control-system" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+            <parameters>$(find car_controller)/config/car_controllers.yaml</parameters>
+        </plugin>
+    </gazebo>
     
 </robot>

@@ -1,7 +1,12 @@
 <?xml version="1.0"?>
 
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="car"> 
+
+    <xacro:arg name="is_ignition" default="true"/>
+
     <xacro:include filename="$(find car_description)/urdf/robot_gazebo.xacro"/>
+    
+    <xacro:include filename="$(find car_description)/urdf/robot_ros2_control.xacro"/>
 
     <link name="base_footprint"/>
 
@@ -22,7 +27,7 @@
         <collision>
         <origin xyz="0 0 0" rpy="0 0 0" />
         <geometry>
-            <mesh filename="package://bumperbot_description/meshes/base_link.STL" />
+            <mesh filename="package://car_description/meshes/base_link.STL" />
         </geometry>
         </collision>
     </link>
