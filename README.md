@@ -14,5 +14,5 @@ Keyboard Teleop:
 If want to see odom in Rviz2: 
 `ros2 launch car_description display.launch.py`
 
-To see IMU output (/imu/out), you can use Foxglove: 
+To see IMU output (/imu/out) as a plot, you can use Foxglove: 
 `ros2 launch foxglove_bridge foxglove_bridge_launch.xml`
