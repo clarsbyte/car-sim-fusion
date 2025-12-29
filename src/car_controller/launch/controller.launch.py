@@ -4,20 +4,78 @@ from launch.substitutions import LaunchConfiguration, Command
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 from launch_ros.parameter_descriptions import ParameterValue
+from launch.conditions import IfCondition, UnlessCondition
+from launch.actions import GroupAction
 
 def generate_launch_description():
+    wheel_radius_arg = DeclareLaunchArgument(
+        'wheel_radius',
+        default_value='0.033',
+        description='Radius of the wheels'
+    )
+
+    wheel_separation_arg = DeclareLaunchArgument(
+        'wheel_separation',
+        default_value='0.17',
+        description='Distance between the wheels'
+    )
+
+    use_simple_controller_arg = DeclareLaunchArgument(
+        'use_simple_controller',
+        default_value='False',
+        description='Whether to use the simple controller or not'
+    )
+
+    wheel_radius = LaunchConfiguration('wheel_radius')
+    wheel_separation = LaunchConfiguration('wheel_separation')  
+    use_simple_controller = LaunchConfiguration('use_simple_controller')
+
     joint_state_broadcaster_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["joint_state_broadcaster", "--controller-manager", "/controller_manager"],
+        arguments=[
+            "joint_state_broadcaster",
+            "--controller-manager",
+            "/controller_manager",
+        ],
     )
-    simple_controller = Node(
+
+    wheel_controller_spawner = Node(
         package="controller_manager",
         executable="spawner",
-        arguments=["simple_velocity_controller", "--controller-manager", "/controller_manager"],
+        arguments=["car_controller", 
+                   "--controller-manager", 
+                   "/controller_manager"
+        ],
+        condition=UnlessCondition(use_simple_controller),
+    )
+
+    simple_controller = GroupAction(
+        condition=IfCondition(use_simple_controller),
+        actions=[
+            Node(
+                package="controller_manager",
+                executable="spawner",
+                arguments=["simple_velocity_controller", 
+                           "--controller-manager", 
+                           "/controller_manager"
+                ]
+            ),
+            Node(
+                package="car_controller",
+                executable="simple_controller.py",
+                parameters=[
+                    {"wheel_radius": wheel_radius,
+                    "wheel_separation": wheel_separation,}]
+            ),
+        ]
     )
 
     return LaunchDescription([
+        wheel_radius_arg,
+        wheel_separation_arg,
+        use_simple_controller_arg,
         joint_state_broadcaster_spawner,
-        simple_controller
+        wheel_controller_spawner,
+        simple_controller,
     ])
