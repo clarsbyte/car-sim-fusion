@@ -17,5 +17,7 @@ If want to see odom in Rviz2:
 To see IMU output (/imu/out) as a plot, you can use Foxglove: 
 `ros2 launch foxglove_bridge foxglove_bridge_launch.xml`
 
+Sensor fusion for odom and IMU (Comprehension purposes)
+`ros2 run car_localization kalman_filter.py`
 ## Acknowledgments
 Mesh Credit - Antonio Brandi

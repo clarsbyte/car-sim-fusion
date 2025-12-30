@@ -1,4 +1,4 @@
-#!usr/bin/env python3
+#!/usr/bin/env python3
 
 import rclpy
 from rclpy.node import Node
@@ -6,7 +6,6 @@ from nav_msgs.msg import Odometry
 from sensor_msgs.msg import Imu
 from filterpy.kalman import KalmanFilter
 import numpy as np
-from filterpy.common import Q_discrete_white_noise
 
 class KalmanFilterNode(Node):
     def __init__(self):
@@ -33,7 +32,7 @@ class KalmanFilterNode(Node):
         self.kf.R = np.array([[0.5,  0.0], # IMU noise (lower = trust more)
                             [0.0,  5.0]])  # Odometry noise (higher = trust less)
 
-        self.kf.Q = Q_discrete_white_noise(dim=1, dt=0.1, var=4)
+        self.kf.Q = np.array([[0.4]])  # Process noise: var * dt = 4 * 0.1
 
     def imu_callback(self, msg):
         self.imu_angular_z = msg.angular_velocity.z
