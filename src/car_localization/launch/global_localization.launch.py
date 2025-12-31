@@ -38,8 +38,23 @@ def generate_launch_description():
         }]
     )
 
+    lifecycle_nodes = ['map_server']
+
+    nav2_lifecycle_manager = Node(
+        package='nav2_lifecycle_manager',
+        executable='lifecycle_manager',
+        output='screen',
+        name='lifecycle_manager_localization',
+        parameters=[{
+            'use_sim_time': use_sim_time,
+            'autostart': True,
+            'node_names': lifecycle_nodes
+        }]
+    )
+
     return LaunchDescription([
         map_name_arg,
         use_sim_time_arg,
-        nav2_map_server
+        nav2_map_server,
+        nav2_lifecycle_manager
     ])

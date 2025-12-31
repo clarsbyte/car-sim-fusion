@@ -216,4 +216,34 @@
         <origin xyz="0 0 0.1208" rpy="0 0 3.14"/>
         <axis xyz="0 0 0" />
     </joint>
+    
+    <link name="camera_link">
+        <inertial>
+        <origin xyz="0.0 0.0 0.0" rpy="0 0 0" />
+        <mass value="0.05" />
+        <inertia ixx="1e-05" ixy="0.0" ixz="0.0"
+                iyy="1e-05" iyz="0.0"
+                izz="1e-05" />
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+                <box size="0.05 0.03 0.03"/>
+            </geometry>
+        </visual>
+        <collision>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                    <box size="0.05 0.03 0.03"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <joint name="camera_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="camera_link"/>
+        <origin xyz="0 0 0.13" rpy="0 0 0"/>
+        <axis xyz="0 0 0" />
+    </joint>
+
 </robot>
