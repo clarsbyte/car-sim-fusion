@@ -24,7 +24,21 @@ To see IMU output (/imu/out) as a plot, you can use Foxglove:
 Sensor fusion for odom and IMU (Comprehension purposes)
 `ros2 run car_localization kalman_filter.py`
 
-## Major Learnings
+To launch safety_stop node:
+`ros2 run car_utils safety_stop.py`
+
+### Nav 2
+
+`ros2 launch car_localization global_localization.launch.py`
+
+Configure:
+`ros2 lifecycle set /map_server 1`
+
+Activate:
+`ros2 lifecycle set /map_server 3`
+
+
+## Learnings
 - Ensure the /clock is published on gz_ros2_bridge: `"/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",` as it is crucial for twist_mux
 
 ## Acknowledgments
