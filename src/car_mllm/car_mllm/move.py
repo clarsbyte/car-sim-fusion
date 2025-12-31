@@ -8,12 +8,12 @@ class ActionMove(Node):
         super().__init__("action_move")
 
         self.twist_pub_ = self.create_publisher(Twist, "nav/cmd_vel", 10)
-        self.timer = self.create_timer(0.1, self.publish_cmd)  # 10 Hz
+        self.mllm_sub_ = self.create_subscription(Twist, "vision_action/output", self.mllm_callback, 10)
 
-    def publish_cmd(self):
+    def mllm_callback(self, msg):
         twist = Twist()
-        twist.linear.x = 0.5  # forward speed (m/s)
-        twist.angular.z = 0.0 
+        twist.linear.x = msg.linear.x
+        twist.angular.z = msg.angular.z
         self.twist_pub_.publish(twist)
 
 def main(args=None):

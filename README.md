@@ -27,6 +27,9 @@ Sensor fusion for odom and IMU (Comprehension purposes)
 To launch safety_stop node:
 `ros2 run car_utils safety_stop.py`
 
+Run the VLA:
+`ros2 run car_mllm process --ros-args -p target:="i want to go to the weightlifting barbell"`
+
 ### Nav 2
 
 `ros2 launch car_localization global_localization.launch.py`
