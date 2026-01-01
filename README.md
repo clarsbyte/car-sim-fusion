@@ -3,7 +3,7 @@ Demo Video:
 [![Watch the video](https://img.youtube.com/vi/ONvRc97oi6g/maxresdefault.jpg)](https://youtu.be/ONvRc97oi6g)
 
 ## Brain Behind VLA
-I tried some ollama VLMs on my computer, and the best performing one so far (that my GPU can still handle) is the Llama 3.2 Vision model. While finetuning with a dataset is more effective, my next steps are adding a memory agent and waypoints to this project, since my computer can only handle 69% of the local mLLM haha!
+I tried some ollama VLMs on my computer, and the best performing one so far (that my GPU can still handle) is the Llama 3.2 Vision model. While finetuning with a dataset is more effective, my next steps are adding a memory agent and waypoints to this project, since my GPU can only handle 69% of the local mLLM.
 
 ## Things to run
 
