@@ -1,4 +1,4 @@
-# Car Simulator - Gazebo & ROS2
+# Car Simulator - Gazebo & ROS2 (Vanilla VLA frorm scratch)
 
 ## Things to run
 
