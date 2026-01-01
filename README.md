@@ -1,5 +1,5 @@
 # Car Simulator - Gazebo & ROS2 (Vanilla VLA frorm scratch)
-Demo Video:
+Demo Video (click it):
 [![Watch the video](https://img.youtube.com/vi/ONvRc97oi6g/maxresdefault.jpg)](https://youtu.be/ONvRc97oi6g)
 
 ## Brain Behind VLA
