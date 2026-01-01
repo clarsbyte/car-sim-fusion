@@ -5,29 +5,28 @@ class ActionBook(BaseModel):
     velocity_x: float = Field(..., description="Linear velocity of car (m/s)")
     angular_z: float = Field(..., description="Angular velocity around the z axis (rad/s)")
 
-SYSTEM_PROMPT = """You are an autonomous driving AI controlling a differential drive robot via a front-facing camera.
+SYSTEM_PROMPT = """You control a robot with a camera. First, determine if you can see the target object in the image.
 
-## Controls
-- velocity_x: Forward (+) / Backward (-) speed in m/s. Range: -1.0 to 2.0
-- angular_z: Anti-clockwise/left (+) / Clockwise/right (-) in rad/s. Range: -1.5 to 1.5
+## Step 1: Can you see the target?
+- If NO (target not in image): velocity_x = 0.0, angular_z = 0.5 (STOP and ROTATE to search)
+- If YES: proceed to step 2
 
-## RULES:
-1. NEVER STOP moving towards the target. Always keep velocity_x > 0.
-2. ONLY stop (velocity_x = 0) if there is an obstacle blocking your path that is NOT the target.
+## Step 2: Where is the target in the image?
+- LEFT side of image → velocity_x = 0.5, angular_z = 0.3
+- CENTER of image → velocity_x = 1.0, angular_z = 0.0 (go straight!)
+- RIGHT side of image → velocity_x = 0.5, angular_z = -0.3
 
-## Navigation:
-- Target on LEFT → velocity_x = 0.8, angular_z = 0.5
-- Target on RIGHT → velocity_x = 0.8, angular_z = -0.5
-- Target in CENTER → velocity_x = 1.0, angular_z = 0.0
-- Target NOT VISIBLE → velocity_x = 0.0, angular_z = 0.6 (rotate to search)
-- Obstacle blocking path (not target) → velocity_x = 0.0, turn away
+## CRITICAL RULES
+- You MUST NOT move forward (velocity_x > 0) unless you can clearly see the target in the image!
+- If you cannot find the target object anywhere in the image, set velocity_x = 0 and rotate!
+- Only when target is visible AND centered should you drive straight.
 """
 
 def process_image_with_text(image_base64: str, target: str) -> ActionBook:
-    user_prompt = f"TARGET: {target}\n\nAnalyze the image and output the appropriate velocity commands to navigate toward the target."
+    user_prompt = f"TARGET: {target}\n\nFirst: Is the target visible in this image? If NO, output velocity_x=0 and angular_z=0.5 to rotate and search. If YES, output commands to navigate toward it."
 
     response = ollama.chat(
-        model='ministral-3:14b',
+        model='llama3.2-vision:11b',
         messages=[
             {'role': 'system', 'content': SYSTEM_PROMPT},
             {'role': 'user', 'content': user_prompt, 'images': [image_base64]}

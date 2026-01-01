@@ -27,7 +27,11 @@ Sensor fusion for odom and IMU (Comprehension purposes)
 To launch safety_stop node:
 `ros2 run car_utils safety_stop.py`
 
-Run the VLA:
+### Run the VLA
+Ensure you have ollama llama3.2-vision:11b or the model of your liking, just modify mllm.py in the car_mllm package
+`ollama run llama3.2-vision:11b`
+
+Run the node:
 `ros2 run car_mllm process --ros-args -p target:="i want to go to the weightlifting barbell"`
 
 ### Nav 2
