@@ -1,5 +1,5 @@
 # Car Simulator - Gazebo & ROS2
-For VLA, go to VLA branch.
+For VLA, go to VLA branch: https://github.com/clarsbyte/car-sim-fusion/tree/vla
 ## Things to run
 
 Simulation:
