@@ -4,3 +4,7 @@ log/
 .vscode/
 
 **/models/
+
+yolov8s.pt
+
+**/yolov10s.pt
