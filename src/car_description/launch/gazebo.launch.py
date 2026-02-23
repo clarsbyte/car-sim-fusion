@@ -17,6 +17,16 @@ def generate_launch_description():
                                       description="Absolute path to robot urdf file"
     )
 
+    gazebo_env = [
+        SetEnvironmentVariable("IGN_PARTITION", "local"),
+        SetEnvironmentVariable("IGN_IP", "127.0.0.1"),
+        SetEnvironmentVariable("__NV_PRIME_RENDER_OFFLOAD", "1"),
+        SetEnvironmentVariable("__GLX_VENDOR_LIBRARY_NAME", "nvidia"),
+        SetEnvironmentVariable("__EGL_VENDOR_LIBRARY_FILENAMES", 
+                              "/usr/share/glvnd/egl_vendor.d/10_nvidia.json"),
+        SetEnvironmentVariable("QT_QPA_PLATFORM", "xcb"),
+    ]
+
     world_name_arg = DeclareLaunchArgument(
         name="world_name",
         default_value="empty",
@@ -28,18 +38,6 @@ def generate_launch_description():
         "worlds",
         PythonExpression(expression=["'", LaunchConfiguration("world_name"), "'", " + '.world'" ])
     ])
-
-    ros_distro = os.environ["ROS_DISTRO"]
-    is_ignition = "True" if ros_distro == "humble" else "False"
-    
-    robot_description = ParameterValue(Command([
-            "xacro ",
-            LaunchConfiguration("model"),
-            " is_ignition:=",
-            is_ignition
-        ]),
-        value_type=str
-    )
 
     model_path = str(Path(car_description_dir).parent.resolve())
     model_path += os.pathsep + os.path.join(car_description_dir, "models")
@@ -89,6 +87,7 @@ def generate_launch_description():
             "/clock@rosgraph_msgs/msg/Clock[gz.msgs.Clock",
             "/imu@sensor_msgs/msg/Imu[gz.msgs.IMU",
             "/scan@sensor_msgs/msg/LaserScan[gz.msgs.LaserScan",
+            "/camera@sensor_msgs/msg/Image[gz.msgs.Image",
         ],
         remappings=[
             ("/imu", "/imu/out"),
@@ -96,6 +95,7 @@ def generate_launch_description():
     )
 
     return LaunchDescription([
+        *gazebo_env,
         model_arg,
         world_name_arg,
         gazebo_resource_path,
